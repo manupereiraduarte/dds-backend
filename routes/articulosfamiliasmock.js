@@ -4,7 +4,7 @@ const router = express.Router();
 let arr_ArticulosFamiliasMock = [
   {
     "IdArticuloFamilia": 1,
-    "Nombre": "Accesorios"
+    "Nombre": "Accesorioss"
   },
   {
     "IdArticuloFamilia": 2,
@@ -47,56 +47,55 @@ let arr_ArticulosFamiliasMock = [
 router.get('/api/articulosfamiliasmock', async function (req, res) {
   res.json(arr_ArticulosFamiliasMock);
 });
+
 router.get('/api/articulosfamiliasmock/:id', async function (req, res) {
-    let articuloFamilia = arr_ArticulosFamiliasMock.find(
-      (x) => x.IdArticuloFamilia == req.params.id
-    );
-    if (articuloFamilia) res.json(articuloFamilia);
-    else res.status(404).json({ message: 'articulofamilia no encontrado' });
+  let articuloFamilia = arr_ArticulosFamiliasMock.find(
+    (x) => x.IdArticuloFamilia == req.params.id
+  );
+  if (articuloFamilia) res.json(articuloFamilia);
+  else res.status(404).json({ mensaje: 'articulofamilia no encontrado' });
 });
 
-  router.post('/api/articulosfamiliasmock/', (req, res) => {
-    const { Nombre } = req.body;
-    let articuloFamilia = {
-      Nombre,
-      IdArticuloFamilia: Math.floor(Math.random()*100000),
-    };
-  
-    // aqui agregar a la coleccion
-    arr_ArticulosFamiliasMock.push(articuloFamilia);
-  
-    res.status(201).json(articuloFamilia);
+router.post('/api/articulosfamiliasmock/', (req, res) => {
+  const { Nombre } = req.body;
+  let articuloFamilia = {
+    Nombre,
+    IdArticuloFamilia: arr_ArticulosFamiliasMock.length,
+  };
+
+  // aqui agregar a la coleccion
+  arr_ArticulosFamiliasMock.push(articuloFamilia);
+
+  res.status(204).json(articuloFamilia);
 });
-  
 
 router.put('/api/articulosfamiliasmock/:id', (req, res) => {
-    let articuloFamilia = arr_ArticulosFamiliasMock.find(
-      (x) => x.IdArticuloFamilia == req.params.id
-    );
-  
-    if (articuloFamilia) {
-      const { Nombre } = req.body;
-      articuloFamilia.Nombre = Nombre;
-      res.json({ message: 'articulofamilia actualizado' });
-    } else {
-      res.status(404).json({ message: 'articulofamilia no encontrado' })
-    }
+  let articuloFamilia = arr_ArticulosFamiliasMock.find(
+    (x) => x.IdArticuloFamilia == req.params.id
+  );
+
+  if (articuloFamilia) {
+    const { Nombre } = req.body;
+    articuloFamilia.Nombre = Nombre;
+    res.json({ mensaje: 'articulofamilia actualizado' });
+  } else {
+    res.status(404).json({ mensaje: 'articulofamilia no encontrado' })
+  }
 });
 
 router.delete('/api/articulosfamiliasmock/:id', (req, res) => {
-    let articuloFamilia = arr_ArticulosFamiliasMock.find(
-      (x) => x.IdArticuloFamilia == req.params.id
+  let articuloFamilia = arr_ArticulosFamiliasMock.find(
+    (x) => x.IdArticuloFamilia == req.params.id
+  );
+
+  if (articuloFamilia) {
+    arr_ArticulosFamiliasMock = arr_ArticulosFamiliasMock.filter(
+      (x) => x.IdArticuloFamilia != req.params.id
     );
-  
-    if (articuloFamilia) {
-      arr_ArticulosFamiliasMock = arr_ArticulosFamiliasMock.filter(
-        (x) => x.IdArticuloFamilia != req.params.id
-      );
-      res.json({ message: 'articulofamilia eliminado' });
-    } else {
-      res.status(404).json({ message: 'articulofamilia no encontrado' })
-    }
+    res.json({ mensaje: 'articulofamilia eliminado' });
+  } else {
+    res.status(404).json({ mensaje: 'articulofamilia no encontrado' })
+  }
 });
-  
-  
+
 module.exports = router;

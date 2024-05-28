@@ -10,4 +10,14 @@ router.get("/api/articulosfamilias", async function (req, res, next) {
   res.json(data);
 });
 
+// recuperar un articulo familia por id
+router.get("/api/articulosfamilias/:id", async function (req, res, next) {
+  let data = await db.articulosfamilias.findOne({
+    attributes: ["IdArticuloFamilia", "Nombre"],
+    where: { IdArticuloFamilia: req.params.id },
+  });
+  res.json(data);
+});
+
+
 module.exports = router;

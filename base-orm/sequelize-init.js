@@ -1,7 +1,7 @@
 // configurar ORM sequelize
 const { Sequelize, DataTypes } = require("sequelize");
 //const sequelize = new Sequelize("sqlite:" + process.env.base );
-const sequelize = new Sequelize("sqlite:" + "./.data/pymes.db");
+const sequelize = new Sequelize("sqlite:" + "./.data/pymes.db" );
 
 // definicion del modelo de datos
 const articulosfamilias = sequelize.define(
@@ -13,7 +13,7 @@ const articulosfamilias = sequelize.define(
       autoIncrement: true,
     },
     Nombre: {
-      // todo evitar que string autocomplete con espacios en blanco, debería ser varchar sin espacios
+      // todo evitar que string autocomplete con espacios en blanco, deberia ser varchar sin espacios
       type: DataTypes.STRING(30),
       allowNull: false,
       validate: {
@@ -23,7 +23,7 @@ const articulosfamilias = sequelize.define(
         },
         len: {
           args: [5, 30],
-          msg: "Nombre debe ser tipo caracteres, entre 5 y 30 de longitud",
+          msg: "Nombre debe ser tipo carateres, entre 5 y 30 de longitud",
         },
       },
     },
@@ -33,7 +33,7 @@ const articulosfamilias = sequelize.define(
     hooks: {
       beforeValidate: function (articulofamilia, options) {
         if (typeof articulofamilia.Nombre === "string") {
-          articulofamilia.Nombre = articulofamilia.Nombre.toUpperCase().trim();
+          articulofamilia.Nombre = articulofamilia.Nombre.toUpperCase();
         }
       },
     },
@@ -60,7 +60,7 @@ const articulos = sequelize.define(
         },
         len: {
           args: [5, 60],
-          msg: "Nombre debe ser tipo caracteres, entre 5 y 60 de longitud",
+          msg: "Nombre debe ser tipo carateres, entre 5 y 60 de longitud",
         },
       },
       unique: {
@@ -88,7 +88,7 @@ const articulos = sequelize.define(
         },
         is: {
           args: ["^[0-9]{13}$", "i"],
-          msg: "Codigo de Barra debe ser numérico de 13 digitos",
+          msg: "Codigo de Barra debe ser numerico de 13 digitos",
         },
       },
     },
@@ -138,7 +138,7 @@ const articulos = sequelize.define(
     hooks: {
       beforeValidate: function (articulo, options) {
         if (typeof articulo.Nombre === "string") {
-          articulo.Nombre = articulo.Nombre.toUpperCase().trim();
+          articulo.Nombre = articulo.Nombre.toUpperCase();
         }
       },
     },

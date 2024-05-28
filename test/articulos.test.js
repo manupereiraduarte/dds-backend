@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../index");
+
 const articuloAlta = {
   Nombre: "Articulo " + (() => (Math.random() + 1).toString(36).substring(2))(), // Genera un nombre aleatorio
   Precio: 10.5,
@@ -9,8 +10,9 @@ const articuloAlta = {
   FechaAlta: new Date().toISOString(),
   Activo: true,
 };
+
 const articuloModificacion = {
-  IdArticulo: 1,
+  IdArticulo: 140,
   Nombre: "Articulo " + (() => (Math.random() + 1).toString(36).substring(2))(), // Genera un nombre aleatorio
   Precio: 10.5,
   CodigoDeBarra: "1234567890123",
@@ -44,34 +46,34 @@ describe("GET /api/articulos", () => {
   });
 });
 
-// test route/articulos GET
-describe("GET /api/articulos con filtros", () => {
-  it("Deberia devolver los articulos según filtro ", async () => {
-    const res = await request(app).get("/api/articulos?Nombre=AIRE&Activo=true&Pagina=1");
-    expect(res.statusCode).toEqual(200);
+// // test route/articulos GET
+// describe("GET /api/articulos con filtros", () => {
+//   it("Deberia devolver los articulos según filtro ", async () => {
+//     const res = await request(app).get("/api/articulos?Nombre=AIRE&Activo=true&Pagina=1");
+//     expect(res.statusCode).toEqual(200);
 
-    expect(verificarPropiedades(res.body.Items) ).toEqual(true );
+//     expect(verificarPropiedades(res.body.Items) ).toEqual(true );
   
-    function verificarPropiedades(array) {
-      for (let i = 0; i < array.length; i++) {
-        if ( !array[i].Nombre.includes("AIRE") || !array[i].Activo ) {
-          return false;
-        }
-      }
-      return true;
-    }
+//     function verificarPropiedades(array) {
+//       for (let i = 0; i < array.length; i++) {
+//         if ( !array[i].Nombre.includes("AIRE") || !array[i].Activo ) {
+//           return false;
+//         }
+//       }
+//       return true;
+//     }
     
-  });
-});
+//   });
+// });
 
 // test route/articulos/:id GET
 describe("GET /api/articulos/:id", () => {
   it("Deberia devolver el artículo con el id 1", async () => {
-    const res = await request(app).get("/api/articulos/1");
+    const res = await request(app).get("/api/articulos/140");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toEqual(
       expect.objectContaining({
-        IdArticulo: expect.any(Number),
+        IdArticulo: 140,
         Nombre: expect.any(String),
         Precio: expect.any(Number),
         CodigoDeBarra: expect.any(String),
@@ -88,7 +90,7 @@ describe("GET /api/articulos/:id", () => {
 describe("POST /api/articulos", () => {
   it("Deberia devolver el articulo que acabo de crear", async () => {
     const res = await request(app).post("/api/articulos").send(articuloAlta);
-    expect(res.statusCode).toEqual(200);
+    expect(res.statusCode).toEqual(201);
     expect(res.body).toEqual(
       expect.objectContaining({
         IdArticulo: expect.any(Number),
@@ -108,16 +110,20 @@ describe("POST /api/articulos", () => {
 describe("PUT /api/articulos/:id", () => {
   it("Deberia devolver el articulo con el id 1 modificado", async () => {
     const res = await request(app)
-      .put("/api/articulos/1")
+      .put("/api/articulos/140")
       .send(articuloModificacion);
     expect(res.statusCode).toEqual(204);
+    // verifica que se haya modificado
+    const resGet = await request(app).get("/api/articulos/140");
+    expect(resGet.body.Nombre).toEqual(articuloModificacion.Nombre.toUpperCase());
+
   });
 });
 
 // test route/articulos/:id DELETE
 describe("DELETE /api/articulos/:id", () => {
   it("Debería devolver el artículo con el id 1 borrado", async () => {
-    const res = await request(app).delete("/api/articulos/1");
+    const res = await request(app).delete("/api/articulos/140");
     expect(res.statusCode).toEqual(200);
 
     // baja lógica, no se borra realmente

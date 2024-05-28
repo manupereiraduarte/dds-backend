@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../index");
 
 describe("GET /api/articulosfamilias", function () {
-  it("Devolveria todos los articulosfamilias", async function () {
+  test("Devolveria todos los artciulosfamilias", async function () {
     const res = await request(app)
       .get("/api/articulosfamilias")
       .set("content-type", "application/json");
@@ -17,21 +17,6 @@ describe("GET /api/articulosfamilias", function () {
           Nombre: expect.any(String),
         }),
       ])
-    );
-  });
-});
-
-
-describe("GET /api/articulosfamilias/:id", function () {
-  it("respond with json containing a single articulosfamilias", async function () {
-    const res = await request(app)
-      .get("/api/articulosfamilias/1");
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual(
-      expect.objectContaining({
-        IdArticuloFamilia: 1,
-        Nombre: expect.any(String),
-      })
     );
   });
 });

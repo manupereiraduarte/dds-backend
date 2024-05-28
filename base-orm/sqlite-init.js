@@ -5,7 +5,10 @@ async function CrearBaseSiNoExiste() {
   // abrir base, si no existe el archivo/base lo crea
   await db.open("./.data/pymes.db");
   //await db.open(process.env.base);
-
+  
+  // journal_mode para que no se bloquee la base en escritura en azure
+  // d:/portables/sqlite/sqlite3  pymes.db "PRAGMA journal_mode=wal;"
+  
   let existe = false;
   let res = null;
 
@@ -49,14 +52,14 @@ async function CrearBaseSiNoExiste() {
     await db.run(
       `CREATE table articulos( 
               IdArticulo INTEGER PRIMARY KEY AUTOINCREMENT
-            , Nombre text NOT NULL UNIQUE
-            , Precio real
-            , CodigoDeBarra
-            , IdArticuloFamilia integer
-            , Stock integer
-            , FechaAlta text
-            , Activo boolean,
-            FOREIGN KEY (IdArticuloFamilia) REFERENCES articulosfamilias(IdArticuloFamilia)
+            , Nombre TEXT NOT NULL UNIQUE
+            , Precio REAL NOT NULL
+            , CodigoDeBarra text NOT NULL
+            , IdArticuloFamilia integer NOT NULL
+            , Stock integer NOT NULL
+            , FechaAlta text NOT NULL
+            , Activo boolean NOT NULL,
+            FOREIGN KEY (IdArticuloFamilia) REFERENCES articulosfamilias (IdArticuloFamilia)
             );`
     );
     console.log("tabla articulos creada!");
